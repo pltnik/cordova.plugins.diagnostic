@@ -872,7 +872,7 @@ To override these defaults, you can either edit the messages directly in the pli
 
 # Example project
 
-An example project illustrating use of this legacy version of the plugin can be found here: [https://github.com/dpa99c/cordova-diagnostic-plugin-example/tree/api/22](https://github.com/dpa99c/cordova-diagnostic-plugin-example/tree/api/22)
+An example project illustrating use of this legacy version of the plugin can be found here: [https://github.com/dpa99c/cordova-diagnostic-plugin-example/tree/api-22](https://github.com/dpa99c/cordova-diagnostic-plugin-example/tree/api-22)
 
 ## Screenshots
 
