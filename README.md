@@ -1,8 +1,15 @@
 Cordova diagnostic plugin
-=========================
+===============================================================
+
+# Legacy Android version
+
+__Note:__ this branch contains a version of the plugin for building against legacy Android APIs (22 and below).
+It contains all the functionality on the [master branch](https://github.com/dpa99c/cordova-diagnostic-plugin) __except__ support for Android 6 runtime-permissions, which introduces a minimum of API 23.
+If possible, you should use the master branch, which additionally supports Android 6 runtime-permissions.
+
+Phonegap Build (at the time of writing) does not support API 23, so its users and others who wish to build against API 22 or below, should use this version.
 
 * [Overview](#overview)
-    * [Important Android Note](#important-android-note)
 * [Installation](#installation)
 * [Usage](#usage)
     * [Android, iOS and Windows 10 Mobile](#android-and-ios-and-windows)
@@ -18,25 +25,21 @@ Cordova diagnostic plugin
         - [setWifiState()](#setwifistate)
         - [setBluetoothState()](#setbluetoothstate)
     * [Android and iOS](#android-and-ios)
-        - [isLocationAuthorized()](#islocationauthorized)
-        - [getLocationAuthorizationStatus()](#getlocationauthorizationstatus)
-        - [requestLocationAuthorization()](#requestlocationauthorization)
         - [isCameraPresent()](#iscamerapresent)
-        - [isCameraAuthorized()](#iscameraauthorized)
-        - [getCameraAuthorizationStatus()](#getcameraauthorizationstatus)
-        - [requestCameraAuthorization()](#requestcameraauthorization)
         - [switchToSettings()](#switchtosettings)
     * [Android only](#android-only)
         - [isGpsLocationEnabled()](#isgpslocationenabled)
         - [isNetworkLocationEnabled()](#isnetworklocationenabled)
         - [getLocationMode()](#getlocationmode)
-        - [getPermissionAuthorizationStatus()](#getpermissionauthorizationstatus)
-        - [getPermissionsAuthorizationStatus()](#getpermissionsauthorizationstatus)
-        - [requestRuntimePermission()](#requestruntimepermission)
-        - [requestRuntimePermissions()](#requestruntimepermissions)
     * [iOS only](#ios-only)
+        - [isLocationAuthorized()](#islocationauthorized)
+        - [getLocationAuthorizationStatus()](#getlocationauthorizationstatus)
+        - [requestLocationAuthorization()](#requestlocationauthorization)
         - [isLocationEnabledSetting()](#isLocationEnabledSetting)
         - [registerLocationAuthorizationStatusChangeHandler()](#registerlocationauthorizationstatuschangehandler)
+        - [isCameraAuthorized()](#iscameraauthorized)
+        - [getCameraAuthorizationStatus()](#getcameraauthorizationstatus)
+        - [requestCameraAuthorization()](#requestcameraauthorization)
         - [isCameraRollAuthorized()](#iscamerarollauthorized)
         - [getCameraRollAuthorizationStatus()](#getcamerarollauthorizationstatus)
         - [requestCameraRollAuthorization()](#requestcamerarollauthorization)
@@ -67,36 +70,10 @@ This Cordova/Phonegap plugin for iOS, Android and Windows 10 Mobile is used to c
 
 The plugin also enables an app to show the relevant settings screen, to allow users to change the above device settings.
 
-The plugin is registered in on [npm](https://www.npmjs.com/package/cordova.plugins.diagnostic) as `cordova.plugins.diagnostic`
-
-## Important Android Note
-
-This plugin has been updated to support Android 6 (API 23) [runtime permissions](http://developer.android.com/training/permissions/requesting.html).
-
-In order to do this it must depend on libraries only present in API 23+, so you __must build using Android SDK Platform v23 or above__. To do this you must have [Cordova Android platform](https://github.com/apache/cordova-android)@5.0.0 or above installed in your project. You can check the currently installed platform versions with the following command:
-
-    cordova platform ls
-
-Currently the default version installed (if not specified) is cordova-android@4 which uses API 22, so you need to explicitly specify the version when adding the platform:
-
-    cordova platform add android@5.0.0
-
-__Note:__ Attempting to build with API 22 or below will result in a build error.
-
-
-
-You __must__ also make sure your build environment has the following Android libraries installed. In a local build environment, you'd install these via the Android SDK Manager:
-
- -  Android Support Library - Rev. 23 or above
- -  Android Support Repository - Rev. 23 or above
-
-### Building for API 22 or lower
-
-Phonegap Build (at the time of writing) does not support API 23, so for its users and others who wish to build against API 22 or below, there is a branch of this plugin repo which contains all the functionality __except Android 6 runtime permissions__. This removes the dependency on API 23 and will allow you to build against earlier API versions. The version of this plugin [published to npm](https://www.npmjs.com/package/cordova.plugins.diagnostic) is the master branch containing Android 6 runtime permissions code, so you'll need to install the plugin directly from the GitHub repo and specify the branch:
+The plugin is registered in on [npm](https://www.npmjs.com/package/cordova.plugins.diagnostic) as `cordova.plugins.diagnostic`.
+__However__ the version of the plugin published to npm is the master branch containing Android 6 runtime permissions code and adding the API 23+ dependency, so you'll need to install this version of the plugin directly from the GitHub repo and specify this branch.
 
     cordova plugin add https://github.com/dpa99c/cordova-diagnostic-plugin#api-22
-
-You can also browse this branch directly: [https://github.com/dpa99c/cordova-diagnostic-plugin#api-22](https://github.com/dpa99c/cordova-diagnostic-plugin#api-22)
 
 # Installation
 
@@ -326,94 +303,6 @@ Requires the following capabilities for Windows 10 Mobile:
 
 ## Android and iOS
 
-### isLocationAuthorized()
-
-Checks if the application is authorized to use location.
-
-Note for Android: this is intended for Android 6 / API 23 and above. Calling on Android 5 / API 22 and below will always return GRANTED status as permissions are already granted at installation time.
-
-    cordova.plugins.diagnostic.isLocationAuthorized(successCallback, errorCallback);
-
-#### Parameters
-
-- {Function} successCallback -  The callback which will be called when operation is successful.
-This callback function is passed a single boolean parameter.
-On iOS this will return TRUE if application is authorized to use location either "when in use" (only in foreground) OR "always" (foreground and background).
-On Android this will return TRUE if the app currently has runtime authorisation to use location.
-- {Function} errorCallback -  The callback which will be called when operation encounters an error.
-This callback function is passed a single string parameter containing the error message.
-
-
-#### Example usage
-
-    cordova.plugins.diagnostic.isLocationAuthorized(function(enabled){
-        console.log("Location authorization is " + (enabled ? "enabled" : "disabled"));
-    }, function(error){
-        console.error("The following error occurred: "+error);
-    });
-
-### getLocationAuthorizationStatus()
-
- Returns the location authorization status for the application.
-
- Note for Android: this is intended for Android 6 / API 23 and above. Calling on Android 5 / API 22 and below will always return GRANTED status as permissions are already granted at installation time.
-
-    cordova.plugins.diagnostic.getLocationAuthorizationStatus(successCallback, errorCallback);
-
-#### Parameters
-
-- {Function} successCallback -  The callback which will be called when operation is successful.
-This callback function is passed a single string parameter which indicates the location authorization status.
-On iOS, possible values are: "unknown", "denied", "not_determined", "authorized_always", "authorized_when_in_use".
-On Android, possible values are defined in the [Runtime permission statuses](#runtime-permission-statuses) section.
-- {Function} errorCallback -  The callback which will be called when operation encounters an error.
-This callback function is passed a single string parameter containing the error message.
-
-#### Example usage
-
-    cordova.plugins.diagnostic.getLocationAuthorizationStatus(function(status){
-       console.log("Location authorization status: " + status);
-    }, onError);
-
-
-### requestLocationAuthorization()
-
- Requests location authorization for the application.
-
- Notes for iOS:
- - Calling this on iOS 7 or below will have no effect, as location permissions are are implicitly granted.
- - On iOS 8+, authorization can be requested to use location either "when in use" (only in foreground) or "always" (foreground and background).
- - This should only be called if authorization status is NOT_DETERMINED - calling it when in any other state will have no effect.
- - This plugin adds default messages which are displayed to the user upon requesting location authorization - see the [iOS location permission messages](#ios-location-permission-messages) section for how to customise them.
-
- Note for Android: this is intended for Android 6 / API 23 and above. Calling on Android 5 / API 22 and below will have no effect as the permissions are already granted at installation time.
-
-    cordova.plugins.diagnostic.requestLocationAuthorization(successCallback, errorCallback, mode);
-
-#### Parameters
-
-- {Function} successCallback -  The callback which will be called when operation is successful.
-On iOS, no parameters are passed to the callback.
-On Android, the callback function is passed a single string parameter which defines the [resulting authorisation status](#runtime-permission-statuses).
-- {Function} errorCallback -  The callback which will be called when operation encounters an error.
-This callback function is passed a single string parameter containing the error message.
-- {String} mode - (iOS-only / optional) location authorization mode: "always" or "when_in_use". If not specified, defaults to "when_in_use".
-
-#### Example iOS usage
-
-    cordova.plugins.diagnostic.requestLocationAuthorization(function(){
-        console.log("Successfully requested location authorization always");
-    }, function(error){
-        console.error(error);
-    }, "always");
-
-#### Example Android usage
-
-    cordova.plugins.diagnostic.requestLocationAuthorization(function(status){
-        console.log("Authorisation status is now: "+status);
-    }, function(error){
-        console.error(error);
-    });
 
 ### isCameraPresent()
 
@@ -435,87 +324,6 @@ This callback function is passed a single string parameter containing the error 
         console.log("Camera is " + (present ? "present" : "absent"));
     }, function(error){
         console.error("The following error occurred: "+error);
-    });
-
-### isCameraAuthorized()
-
-Checks if the application is authorized to use the camera.
-
-Note for Android: this is intended for Android 6 / API 23 and above. Calling on Android 5 / API 22 and below will always return TRUE as permissions are already granted at installation time.
-
-    cordova.plugins.diagnostic.isCameraAuthorized(successCallback, errorCallback);
-
-#### Parameters
-
-- {Function} successCallback -  The callback which will be called when operation is successful.
-This callback function is passed a single boolean parameter which is TRUE if camera is authorized for use.
-- {Function} errorCallback -  The callback which will be called when operation encounters an error.
-This callback function is passed a single string parameter containing the error message.
-
-
-#### Example usage
-
-    cordova.plugins.diagnostic.isCameraAuthorized(function(authorized){
-        console.log("App is " + (authorized ? "authorized" : "denied") + " access to the camera");
-    }, function(error){
-        console.error("The following error occurred: "+error);
-    });
-
-### getCameraAuthorizationStatus()
-
- Returns the camera authorization status for the application.
-
- Note for Android: this is intended for Android 6 / API 23 and above. Calling on Android 5 / API 22 and below will always return GRANTED status as permissions are already granted at installation time.
-
-    cordova.plugins.diagnostic.getCameraAuthorizationStatus(successCallback, errorCallback);
-
-#### Parameters
-
-- {Function} successCallback -  The callback which will be called when operation is successful.
-This callback function is passed a single string parameter which indicates the authorization status.
-On iOS, possible values are: "unknown", "denied", "not_determined", "authorized".
-On Android, possible values are defined in the [Runtime permission statuses](#runtime-permission-statuses) section.
-- {Function} errorCallback -  The callback which will be called when operation encounters an error.
-This callback function is passed a single string parameter containing the error message.
-
-#### Example usage
-
-    cordova.plugins.diagnostic.getCameraAuthorizationStatus(function(status){
-       console.log("Camera authorization status: " + status);
-    }, onError);
-
-### requestCameraAuthorization()
-
- Requests camera authorization for the application.
-
- On iOS, should only be called if authorization status is NOT_DETERMINED. Calling it when in any other state will have no effect.
-
- Note for Android: this is intended for Android 6 / API 23 and above. Calling on Android 5 / API 22 and below will have no effect as the permissions are already granted at installation time.
-
-    cordova.plugins.diagnostic.requestCameraAuthorization(successCallback, errorCallback);
-
-#### Parameters
-
-- {Function} successCallback -  The callback which will be called when operation is successful.
-On iOS, the callback function is passed a single boolean parameter indicating whether access to the camera was granted or denied.
-On Android, the callback function is passed a single string parameter which defines the [resulting authorisation status](#runtime-permission-statuses).
-- {Function} errorCallback -  The callback which will be called when operation encounters an error.
-This callback function is passed a single string parameter containing the error message.
-
-#### Example iOS usage
-
-    cordova.plugins.diagnostic.requestCameraAuthorization(function(granted){
-        console.log("Authorization request for camera use was " + (granted ? "granted" : "denied"));
-    }, function(error){
-        console.error(error);
-    });
-
-#### Example Android usage
-
-    cordova.plugins.diagnostic.requestCameraAuthorization(function(status){
-        console.log("Authorization status for camera is " + status);
-    }, function(error){
-        console.error(error);
     });
 
 ### switchToSettings()
@@ -778,6 +586,78 @@ This callback function is passed a single string parameter containing the error 
 
 ## iOS only
 
+### isLocationAuthorized()
+
+Checks if the application is authorized to use location.
+
+    cordova.plugins.diagnostic.isLocationAuthorized(successCallback, errorCallback);
+
+#### Parameters
+
+- {Function} successCallback -  The callback which will be called when operation is successful.
+This callback function is passed a single boolean parameter.
+Will return TRUE if application is authorized to use location either "when in use" (only in foreground) OR "always" (foreground and background).
+- {Function} errorCallback -  The callback which will be called when operation encounters an error.
+This callback function is passed a single string parameter containing the error message.
+
+
+#### Example usage
+
+    cordova.plugins.diagnostic.isLocationAuthorized(function(enabled){
+        console.log("Location authorization is " + (enabled ? "enabled" : "disabled"));
+    }, function(error){
+        console.error("The following error occurred: "+error);
+    });
+
+### getLocationAuthorizationStatus()
+
+ Returns the location authorization status for the application.
+
+    cordova.plugins.diagnostic.getLocationAuthorizationStatus(successCallback, errorCallback);
+
+#### Parameters
+
+- {Function} successCallback -  The callback which will be called when operation is successful.
+This callback function is passed a single string parameter which indicates the location authorization status.
+Possible values are: "unknown", "denied", "not_determined", "authorized_always", "authorized_when_in_use".
+- {Function} errorCallback -  The callback which will be called when operation encounters an error.
+This callback function is passed a single string parameter containing the error message.
+
+#### Example usage
+
+    cordova.plugins.diagnostic.getLocationAuthorizationStatus(function(status){
+       console.log("Location authorization status: " + status);
+    }, onError);
+
+
+### requestLocationAuthorization()
+
+ Requests location authorization for the application.
+
+ Notes for iOS:
+ - Calling this on iOS 7 or below will have no effect, as location permissions are are implicitly granted.
+ - On iOS 8+, authorization can be requested to use location either "when in use" (only in foreground) or "always" (foreground and background).
+ - This should only be called if authorization status is NOT_DETERMINED - calling it when in any other state will have no effect.
+ - This plugin adds default messages which are displayed to the user upon requesting location authorization - see the [iOS location permission messages](#ios-location-permission-messages) section for how to customise them.
+
+    cordova.plugins.diagnostic.requestLocationAuthorization(successCallback, errorCallback, mode);
+
+#### Parameters
+
+- {Function} successCallback -  The callback which will be called when operation is successful.
+No parameters are passed to the callback.
+- {Function} errorCallback -  The callback which will be called when operation encounters an error.
+This callback function is passed a single string parameter containing the error message.
+- {String} mode - (iOS-only / optional) location authorization mode: "always" or "when_in_use". If not specified, defaults to "when_in_use".
+
+#### Example usage
+
+    cordova.plugins.diagnostic.requestLocationAuthorization(function(){
+        console.log("Successfully requested location authorization always");
+    }, function(error){
+        console.error(error);
+    }, "always");
+
 ### isLocationEnabledSetting()
 
 Returns true if the device setting for location is on.
@@ -821,6 +701,72 @@ Expected values are: "denied", "authorized_always" or "authorized_when_in_use"
     cordova.plugins.diagnostic.registerLocationAuthorizationStatusChangeHandler(function(status){
         console.log("Location authorization status changed from \"not_determined\" to: "+status);
     });
+
+### isCameraAuthorized()
+
+Checks if the application is authorized to use the camera.
+
+    cordova.plugins.diagnostic.isCameraAuthorized(successCallback, errorCallback);
+
+#### Parameters
+
+- {Function} successCallback -  The callback which will be called when operation is successful.
+This callback function is passed a single boolean parameter which is TRUE if camera is authorized for use.
+- {Function} errorCallback -  The callback which will be called when operation encounters an error.
+This callback function is passed a single string parameter containing the error message.
+
+
+#### Example usage
+
+    cordova.plugins.diagnostic.isCameraAuthorized(function(authorized){
+        console.log("App is " + (authorized ? "authorized" : "denied") + " access to the camera");
+    }, function(error){
+        console.error("The following error occurred: "+error);
+    });
+
+### getCameraAuthorizationStatus()
+
+ Returns the camera authorization status for the application.
+
+    cordova.plugins.diagnostic.getCameraAuthorizationStatus(successCallback, errorCallback);
+
+#### Parameters
+
+- {Function} successCallback -  The callback which will be called when operation is successful.
+This callback function is passed a single string parameter which indicates the authorization status.
+Possible values are: "unknown", "denied", "not_determined", "authorized".
+- {Function} errorCallback -  The callback which will be called when operation encounters an error.
+This callback function is passed a single string parameter containing the error message.
+
+#### Example usage
+
+    cordova.plugins.diagnostic.getCameraAuthorizationStatus(function(status){
+       console.log("Camera authorization status: " + status);
+    }, onError);
+
+### requestCameraAuthorization()
+
+ Requests camera authorization for the application.
+
+ Should only be called if authorization status is NOT_DETERMINED. Calling it when in any other state will have no effect.
+
+    cordova.plugins.diagnostic.requestCameraAuthorization(successCallback, errorCallback);
+
+#### Parameters
+
+- {Function} successCallback -  The callback which will be called when operation is successful.
+The callback function is passed a single boolean parameter indicating whether access to the camera was granted or denied.
+- {Function} errorCallback -  The callback which will be called when operation encounters an error.
+This callback function is passed a single string parameter containing the error message.
+
+#### Example usage
+
+    cordova.plugins.diagnostic.requestCameraAuthorization(function(granted){
+        console.log("Authorization request for camera use was " + (granted ? "granted" : "denied"));
+    }, function(error){
+        console.error(error);
+    });
+
 
 ### isCameraRollAuthorized()
 
