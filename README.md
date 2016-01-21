@@ -4,7 +4,7 @@ Cordova diagnostic plugin
 # Legacy Android version
 
 __Note:__ this branch contains a version of the plugin for building against legacy Android APIs (22 and below).
-It contains all the functionality on the [master branch](https://github.com/dpa99c/cordova-diagnostic-plugin) __except__ support for Android 6 runtime-permissions, which introduces a minimum of API 23.
+It contains all the functionality on the [master branch](https://github.com/dpa99c/cordova-diagnostic-plugin) __except__ support for Android 6 runtime-permissions, which introduces a dependency on API 23.
 If possible, you should use the master branch, which additionally supports Android 6 runtime-permissions.
 
 Phonegap Build (at the time of writing) does not support API 23, so its users and others who wish to build against API 22 or below, should use this version.
@@ -78,23 +78,23 @@ __However__ the version of the plugin published to npm is the master branch cont
 
 ## Using the Cordova/Phonegap [CLI](http://docs.phonegap.com/en/edge/guide_cli_index.md.html)
 
-    $ cordova plugin add cordova.plugins.diagnostic
-    $ phonegap plugin add cordova.plugins.diagnostic
+    $ cordova plugin add https://github.com/dpa99c/cordova-diagnostic-plugin#api-22
+    $ phonegap plugin add https://github.com/dpa99c/cordova-diagnostic-plugin#api-22
 
 **NOTE**: Make sure your Cordova CLI version is 5.0.0+ (check with `cordova -v`). Cordova 4.x and below uses the now deprecated [Cordova Plugin Registry](http://plugins.cordova.io) as its plugin repository, so using a version of Cordova 4.x or below will result in installing an [old version](http://plugins.cordova.io/#/package/cordova.plugins.diagnostic) of this plugin.
 
 ## Using [Cordova Plugman](https://github.com/apache/cordova-plugman)
 
-    $ plugman install --plugin=cordova.plugins.diagnostic --platform=<platform> --project=<project_path> --plugins_dir=plugins
+    $ plugman install --plugin=https://github.com/dpa99c/cordova-diagnostic-plugin#api-22 --platform=<platform> --project=<project_path> --plugins_dir=plugins
 
 For example, to install for the Android platform
 
-    $ plugman install --plugin=cordova.plugins.diagnostic --platform=android --project=platforms/android --plugins_dir=plugins
+    $ plugman install --plugin=https://github.com/dpa99c/cordova-diagnostic-plugin#api-22 --platform=android --project=platforms/android --plugins_dir=plugins
 
 ## PhoneGap Build
-Add the following xml to your config.xml to use the latest version of this plugin from [npm](https://www.npmjs.com/package/cordova.plugins.diagnostic):
+Add the following xml to your config.xml to use the legacy version of this plugin:
 
-    <gap:plugin name="cordova.plugins.diagnostic" source="npm" />
+    <gap:plugin name="https://github.com/dpa99c/cordova-diagnostic-plugin#api-22" source="git" />
 
 # Usage
 
@@ -880,7 +880,6 @@ An example project illustrating use of this plugin can be found here: [https://g
 
 ![Android screenshot](https://raw.githubusercontent.com/dpa99c/cordova-diagnostic-plugin-example/master/screenshots/android_1.png)
 ![Android screenshot](https://raw.githubusercontent.com/dpa99c/cordova-diagnostic-plugin-example/master/screenshots/android_2.png)
-![Android screenshot](https://raw.githubusercontent.com/dpa99c/cordova-diagnostic-plugin-example/master/screenshots/android_3.png)
 
 ### iOS
 
