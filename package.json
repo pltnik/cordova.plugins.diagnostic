@@ -1,6 +1,6 @@
 {
-    "version": "2.3.9-api-22",
-    "name": "cordova.plugins.diagnostic",
+    "version": "2.3.10-api-22",
+    "name": "cordova.plugins.diagnostic.api-22",
     "cordova_name": "Diagnostic",
     "description": "Cordova/Phonegap plugin to check the state of Location/WiFi/Camera/Bluetooth device settings.",
     "author": "Dave Alden",
