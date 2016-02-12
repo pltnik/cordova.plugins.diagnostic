@@ -481,17 +481,20 @@ This callback function is passed a single string parameter containing the error 
  Requests location authorization for the application.
 
  Notes for iOS:
- - Calling this on iOS 7 or below will have no effect, as location permissions are are implicitly granted.
- - On iOS 8+, authorization can be requested to use location either "when in use" (only in foreground) or "always" (foreground and background).
- - This should only be called if authorization status is NOT_DETERMINED - calling it when in any other state will have no effect.
- - This plugin adds default messages which are displayed to the user upon requesting location authorization - see the [iOS location permission messages](#ios-location-permission-messages) section for how to customise them.
+
+  - Calling this on iOS 7 or below will have no effect, as location permissions are are implicitly granted.
+  - On iOS 8+, authorization can be requested to use location either "when in use" (only in foreground) or "always" (foreground and background).
+  - This should only be called if authorization status is NOT_DETERMINED - calling it when in any other state will have no effect.
+  - This plugin adds default messages which are displayed to the user upon requesting location authorization - see the [iOS location permission messages](#ios-location-permission-messages) section for how to customise them.
+  - The successCallback is invoked on successfully requesting the permission, **NOT** in response to the user's choice in the permission dialog.
+  - To listen for the outcome of the user's choice in the permission dialog, use [registerLocationAuthorizationStatusChangeHandler()](#registerlocationauthorizationstatuschangehandler)
+
 
     cordova.plugins.diagnostic.requestLocationAuthorization(successCallback, errorCallback, mode);
 
 #### Parameters
 
-- {Function} successCallback -  The callback which will be called when operation is successful.
-No parameters are passed to the callback.
+- {Function} successCallback -  This is invoked on successfully requesting the permission, **NOT** in response to the user's choice in the permission dialog. No parameters are passed to the callback.
 - {Function} errorCallback -  The callback which will be called when operation encounters an error.
 This callback function is passed a single string parameter containing the error message.
 - {String} mode - (iOS-only / optional) location authorization mode: "always" or "when_in_use". If not specified, defaults to "when_in_use".
