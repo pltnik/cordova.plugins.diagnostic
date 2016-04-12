@@ -68,7 +68,7 @@ This version of the plugin is for building against legacy Android APIs (22 and b
 It contains all the functionality on the [master branch](https://github.com/dpa99c/cordova-diagnostic-plugin) __except__ support for Android 6 runtime-permissions, which introduces a dependency on API 23.
 If possible, you should use the master branch, which additionally supports Android 6 runtime-permissions.
 
-Phonegap Build (at the time of writing) does not support API 23, so its users and others who wish to build against API 22 or below, should use this version.
+**NOTE**: Phonegap Build now supports API 23, so its users should now use the [master branch](https://github.com/dpa99c/cordova-diagnostic-plugin) of the plugin.
 
 # Installation
 
@@ -92,7 +92,7 @@ For example, to install for the Android platform
 ## PhoneGap Build
 Add the following xml to your config.xml to use the legacy version of this plugin:
 
-    <gap:plugin name="cordova.plugins.diagnostic.api-22" source="npm" />
+    <plugin name="cordova.plugins.diagnostic.api-22" source="npm" />
 
 # Usage
 
